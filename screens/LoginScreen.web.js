@@ -19,7 +19,7 @@ const LoginScreen = ({ navigation }) => {
         setUsers(response);
       });
     }, []);
-    
+
 
     const handleLogin = (email)=>{
       const matchedUser = users.find((user) => {
@@ -45,21 +45,25 @@ const LoginScreen = ({ navigation }) => {
         style={styles.logo}
         source={require('../gif/farmlyLogo.png')}/>
         <Text style={styles.header}>Welcome to Farmly Marketplace!</Text>
-        <Input
-          placeholder="Enter your email"
-          leftIcon={{ type: "material", name: "email" }}
-          onChangeText={(username) => setEmail(username)}
-          clearButtonMode="always"
-          required
-        />
-        <Input
-          leftIcon={{ type: "material", name: "lock" }}
-          placeholder="Enter your password"
-          onChangeText={(password) => setPassword(password)}
-          clearButtonMode="always"
-          secureTextEntry
-          required
-        />
+        <View style={styles.inputContainer}>
+          <Input
+            placeholder="Enter your email"
+            leftIcon={{ type: "material", name: "email" }}
+            onChangeText={(username) => setEmail(username)}
+            clearButtonMode="always"
+            required
+            containerStyle={styles.input}
+          />
+          <Input
+            leftIcon={{ type: "material", name: "lock" }}
+            placeholder="Enter your password"
+            onChangeText={(password) => setPassword(password)}
+            clearButtonMode="always"
+            secureTextEntry
+            required
+            containerStyle={styles.input}
+          />
+        </View>
         <Pressable
           onPress={()=> [signin(email, password), handleLogin(email)]}
           style={styles.buttonText}
@@ -107,23 +111,36 @@ export default LoginScreen;
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    minHeight: '100vh',
   },
   container: {
     flex: 1,
+    width: '100%',
+    maxWidth: 600,
     alignItems: "center",
     justifyContent: "center",
-    padding: 10,
-    paddingTop: 80,
-    paddingBottom: 40
+    padding: 40,
+    paddingTop: 60,
+    paddingBottom: 60
   },
   header: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: "bold",
-    marginTop: 50,
-    marginBottom: 20,
+    marginTop: 30,
+    marginBottom: 30,
     color: "#508D3D",
     fontFamily: "Georgia",
-    fontStyle:'italic'
+    fontStyle:'italic',
+    textAlign: 'center',
+  },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 20,
+  },
+  input: {
+    width: '100%',
   },
   button: {
     width: "100%",
@@ -134,21 +151,25 @@ const styles = StyleSheet.create({
   optionsContainer: {
     flexDirection: "column",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 30,
+    width: '100%',
   },
   linksContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 5,
+    marginTop: 10,
+    flexWrap: 'wrap',
+    justifyContent: 'center',
   },
   optionText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#666",
   },
   underlineText: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#508D3D",
     textDecorationLine: "underline",
+    fontWeight: '500',
   },
   buttonContainer: {
     marginTop: 10,
@@ -162,20 +183,23 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     backgroundColor: '#4d9900',
     alignItems:'center',
-    padding: 17,
-    paddingLeft: 30,
-    paddingRight: 30,
-    borderRadius: 20
+    padding: 20,
+    paddingLeft: 50,
+    paddingRight: 50,
+    borderRadius: 25,
+    cursor: 'pointer',
   },
   logo:{
-    width: "80%",
-    height: "40%",
-    borderRadius: 400 / 2,
+    width: 300,
+    height: 300,
+    borderRadius: 150,
     alignItems: "center",
     justifyContent: "center",
+    resizeMode: 'contain',
   },
   text:{
-    fontSize: 20,
-    color:'white'
+    fontSize: 18,
+    color:'white',
+    fontWeight: 'bold',
   }
 });

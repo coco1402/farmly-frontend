@@ -5,6 +5,10 @@ const isDevelopment = __DEV__;  // React Native 自动提供
 
 // Get the appropriate local API URL based on platform
 const getLocalApiUrl = () => {
+  if (Platform.OS === 'web') {
+    // return 'https://farmly.onrender.com/api';  
+    return 'http://localhost:3000/api';  
+  }
   if (Platform.OS === 'android') {
     return 'http://10.0.2.2:3000/api';  // Android emulator
   } else {

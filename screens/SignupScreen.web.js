@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, TouchableOpacity, Image, Alert } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Pressable, TouchableOpacity, Image } from "react-native";
 import { Button, Input } from "react-native-elements";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { Picker } from "@react-native-picker/picker";
@@ -22,7 +22,7 @@ const SignUpScreen = ({ navigation }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   let { type, setType, isFirstLaunch, setIsFirstLaunch, isLoggedIn, setIsLoggedIn } =
     useContext(UserContext);
-  
+
   // Set default type to customer if not set
   useEffect(() => {
     if (!type) {
@@ -41,15 +41,7 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   const pickImage = async () => {
-    // Request permission
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (status !== 'granted') {
-      Alert.alert('Permission needed', 'Please grant permission to access your photos');
-      return;
-    }
-
-    // Launch image picker
+    // On web, this will open file picker dialog
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
       allowsEditing: true,
@@ -125,117 +117,122 @@ const SignUpScreen = ({ navigation }) => {
   };
 
   return (
-     <ScrollView style={{flex: 1}} showsVerticalScrollIndicator={true}>
+     <ScrollView style={{flex: 1}} contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={true}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('LoginScreen')}>
           <Text style={styles.backText}>← Back</Text>
         </TouchableOpacity>
-        <View style={{ height: 80 }} />
-        <Input
-          style={styles.inputContainer}
-          placeholder="Enter your name"
-          label="Name"
-          value={name} 
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={(text) => setName(text)}
-          enablesReturnKeyAutomatically
-          required
-        />
-        <Input
-          style={styles.inputContainer}   
-          placeholder="Enter email"
-          label="Email"
-          value={email}
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={(text) => setEmail(text)}
-          enablesReturnKeyAutomatically
-          required
-        />
+        <Text style={styles.title}>Create Account</Text>
+        <View style={styles.formContainer}>
           <Input
-          style={styles.inputContainer}                 
-          placeholder="Enter password "
-          label="Password"
-          value={password}
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry={passwordVisibility}
-          enablesReturnKeyAutomatically
-          required
-          rightIcon={
-            <Pressable onPress={handlePasswordVisibility}>
-              <MaterialCommunityIcons name={rightIcon} size={22} color="#232323" />
-            </Pressable>
-          }
-        />
-
-        
-        <Input
-          style={styles.inputContainer}   
-          placeholder="Confirm password "
-          label="Confirm password"
-          value={confirmPassword}
-          autoCapitalize="none"
-          autoCorrect={false}
-          onChangeText={(text) => setConfirmPassword(text)}
-          secureTextEntry={passwordVisibility}
-          enablesReturnKeyAutomatically
-          required
-          rightIcon={
-            <Pressable onPress={handlePasswordVisibility}>
-              <MaterialCommunityIcons name={rightIcon} size={22} color="#232323" />
-            </Pressable>
-          }
-        />
-        <View style={styles.imagePickerContainer}>
-          <Text style={styles.imagePickerLabel}>Profile Picture</Text>
-          <TouchableOpacity style={styles.imagePickerButton} onPress={pickImage}>
-            {avatarUri ? (
-              <Image source={{ uri: avatarUri }} style={styles.avatarPreview} />
-            ) : (
-              <View style={styles.placeholderContainer}>
-                <MaterialCommunityIcons name="camera-plus" size={40} color="#86939e" />
-                <Text style={styles.placeholderText}>Tap to select photo</Text>
-              </View>
-            )}
-          </TouchableOpacity>
-        </View>
-        <Input
-          style={styles.inputContainer}   
-          placeholder="Enter your postcode"
-          label="Postcode"
-          value={postcode}
-          autoCapitalize ="characters"
-          onChangeText={(postcode) => setPostcode(postcode)}
-          enablesReturnKeyAutomatically
-          required
-        />
-
-        <View style={styles.typeContainer}>
-          <Text style={styles.typeText}>Select a type</Text>
-          <Picker 
-            style={{height: 150, width: '100%', marginTop: -30}}
-            selectedValue={type}
-            onValueChange={(value) => setType(value)}
-          >
-            <Picker.Item label="I am a customer" value="customer" />
-            <Picker.Item label="I am a farmer" value="farmer" />
-          </Picker>
-        </View>
-
-        <View style={{marginTop: 50, marginBottom: 20, width: '80%'}}>
-          <Button
-            title="Register"
-            onPress={handleSignUp}
-            color="#4d9900"
+            style={styles.inputContainer}
+            placeholder="Enter your name"
+            label="Name"
+            value={name}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={(text) => setName(text)}
+            enablesReturnKeyAutomatically
+            required
+            containerStyle={styles.input}
           />
+          <Input
+            style={styles.inputContainer}
+            placeholder="Enter email"
+            label="Email"
+            value={email}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={(text) => setEmail(text)}
+            enablesReturnKeyAutomatically
+            required
+            containerStyle={styles.input}
+          />
+            <Input
+            style={styles.inputContainer}
+            placeholder="Enter password "
+            label="Password"
+            value={password}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={(text) => setPassword(text)}
+            secureTextEntry={passwordVisibility}
+            enablesReturnKeyAutomatically
+            required
+            containerStyle={styles.input}
+            rightIcon={
+              <Pressable onPress={handlePasswordVisibility}>
+                <MaterialCommunityIcons name={rightIcon} size={22} color="#232323" />
+              </Pressable>
+            }
+          />
+
+
+          <Input
+            style={styles.inputContainer}
+            placeholder="Confirm password "
+            label="Confirm password"
+            value={confirmPassword}
+            autoCapitalize="none"
+            autoCorrect={false}
+            onChangeText={(text) => setConfirmPassword(text)}
+            secureTextEntry={passwordVisibility}
+            enablesReturnKeyAutomatically
+            required
+            containerStyle={styles.input}
+            rightIcon={
+              <Pressable onPress={handlePasswordVisibility}>
+                <MaterialCommunityIcons name={rightIcon} size={22} color="#232323" />
+              </Pressable>
+            }
+          />
+          <View style={styles.imagePickerContainer}>
+            <Text style={styles.imagePickerLabel}>Profile Picture</Text>
+            <TouchableOpacity style={styles.imagePickerButton} onPress={pickImage}>
+              {avatarUri ? (
+                <Image source={{ uri: avatarUri }} style={styles.avatarPreview} />
+              ) : (
+                <View style={styles.placeholderContainer}>
+                  <MaterialCommunityIcons name="camera-plus" size={50} color="#86939e" />
+                  <Text style={styles.placeholderText}>Click to select photo</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+          <Input
+            style={styles.inputContainer}
+            placeholder="Enter your postcode"
+            label="Postcode"
+            value={postcode}
+            autoCapitalize ="characters"
+            onChangeText={(postcode) => setPostcode(postcode)}
+            enablesReturnKeyAutomatically
+            required
+            containerStyle={styles.input}
+          />
+
+          <View style={styles.typeContainer}>
+            <Text style={styles.typeText}>Select a type</Text>
+            <Picker
+              style={{height: 120, width: '100%', marginTop: 10}}
+              selectedValue={type}
+              onValueChange={(value) => setType(value)}
+            >
+              <Picker.Item label="I am a customer" value="customer" />
+              <Picker.Item label="I am a farmer" value="farmer" />
+            </Picker>
+          </View>
+
+          <View style={{marginTop: 40, marginBottom: 20, width: '100%'}}>
+            <Pressable
+              onPress={handleSignUp}
+              style={styles.registerButton}
+            >
+              <Text style={styles.registerText}>Register</Text>
+            </Pressable>
+          </View>
         </View>
-      
-
-      </View >
-
+      </View>
     </ScrollView>
   );
 };
@@ -245,19 +242,20 @@ export default SignUpScreen;
 const styles = StyleSheet.create({
   scrollContainer: {
     flexGrow: 1,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    minHeight: '100vh',
   },
   container: {
-    backgroundColor: 'white',
+    width: '100%',
+    maxWidth: 600,
     alignItems: 'center',
-    paddingTop: 20,
-    paddingHorizontal: 20,
-    paddingBottom: 50,
+    paddingTop: 40,
+    paddingHorizontal: 40,
+    paddingBottom: 60,
   },
   backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
+    alignSelf: 'flex-start',
     backgroundColor: "rgba(255, 255, 255, 0.9)",
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -267,19 +265,37 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
+    marginBottom: 20,
+    cursor: 'pointer',
   },
   backText: {
     fontSize: 16,
     color: '#333',
     lineHeight: 24,
   },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#508D3D",
+    fontFamily: "Georgia",
+    fontStyle:'italic',
+    marginBottom: 30,
+    textAlign: 'center',
+  },
+  formContainer: {
+    width: '100%',
+    alignItems: 'center',
+  },
   inputContainer: {
     margin: 10,
     padding: 10,
   },
+  input: {
+    width: '100%',
+  },
   inputField: {
     fontSize: 22,
-    width: '80%'
+    width: '100%'
   },
   typeContainer: {
     margin: 10,
@@ -290,26 +306,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#86939e',
-    marginLeft: 0,
+    marginLeft: 10,
     marginBottom: 0
+  },
+  registerButton: {
+    backgroundColor: '#4d9900',
+    alignItems: 'center',
+    padding: 20,
+    paddingLeft: 50,
+    paddingRight: 50,
+    borderRadius: 25,
+    cursor: 'pointer',
+  },
+  registerText: {
+    fontSize: 18,
+    color: 'white',
+    fontWeight: 'bold',
   },
   imagePickerContainer: {
     width: '100%',
     paddingHorizontal: 10,
-    marginVertical: 15,
+    marginVertical: 20,
   },
   imagePickerLabel: {
     fontSize: 16,
     fontWeight: 'bold',
     color: '#86939e',
     marginLeft: 10,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   imagePickerButton: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    borderWidth: 2,
+    width: 180,
+    height: 180,
+    borderRadius: 90,
+    borderWidth: 3,
     borderColor: '#86939e',
     borderStyle: 'dashed',
     justifyContent: 'center',
@@ -317,19 +347,20 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     backgroundColor: '#f5f5f5',
     overflow: 'hidden',
+    cursor: 'pointer',
   },
   avatarPreview: {
     width: '100%',
     height: '100%',
-    borderRadius: 75,
+    borderRadius: 90,
   },
   placeholderContainer: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   placeholderText: {
-    marginTop: 8,
-    fontSize: 12,
+    marginTop: 10,
+    fontSize: 14,
     color: '#86939e',
     textAlign: 'center',
   }
